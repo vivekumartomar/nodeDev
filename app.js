@@ -3,22 +3,27 @@ const express = require("express");
 const app = express();
 
 // to get the dynamic params
-app.use('/user/:userid', (req, res)=>{
-    console.log(req.params);
-    res.send('req.params'+ req.params.userid);
-})
+app.use('/user', (req, res, next)=>{
+    console.log('1st route handler');
+    next();
 
-// /to gets query param
-app.get('/getuserdata', (req, res) => {
-console.log(req.query)
-   res.send(req.query)
+},(req, res, next) =>{
+    console.log('2nd route handler');
+    next();
+}, (req, res, next) =>{
+    console.log('3rd route handler');
+    next();
+}, (req, res, next) =>{
+    console.log('4th route handler');
+    // throw new Error("Something went wrong!");
+    res.send('done!!!');
 
-//    next();
-});
+} , (error, req, res, next) =>{
+    console.log(error)
+    res.status(500).send("Something went wrong!");
+}
 
-// app.use('/', (err, req, res, next) => {
-//     res.status(500).send('something went wrong');
-// })
+)
 
 app.listen(7777, ()=>{
     console.log("server startted at 7777");
